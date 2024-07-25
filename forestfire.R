@@ -1,11 +1,13 @@
 library(tidyverse)
 library(igraph)
 
-g <- sample_forestfire(100, 0.2)
-plot(g, layout = layout_with_kk)
+n <- 100000 # max ≈ 50000 if bw.factor = 1. Otherwise more.
+g <- sample_forestfire(n, fw.prob = 0.37, bw.factor = 0.86)
+# plot(g, layout = layout_with_kk)
 
 pr <- page_rank(g)
 
-data_frame(page_rank = pr$vector) %>%
+tibble(page_rank = pr$vector) %>%
   ggplot(aes(x = page_rank)) +
-  geom_density()
+  geom_histogram(bins = 200) +
+  xlim(0, 1/n)
